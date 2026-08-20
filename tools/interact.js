@@ -193,12 +193,33 @@ const t = async (name, fn) => { try { await fn(); ok.push(name); } catch (e) { f
   await t('البثّ الحقيقي يُشغَّل داخل الصفحة', async () => {
     await p.click('button[aria-label="شاهد البثّ المباشر"]');
     await p.waitForSelector('iframe[src*="youtube-nocookie.com/embed"]', { timeout: 8000 });
-    await p.waitForTimeout(4000);
-    if (!p.frames().some(f => f.url().includes('youtube'))) throw new Error('لم يُحمَّل إطار YouTube');
+    await p.waitForTimeout(5000);
+
+    const fr = p.frames().find(f => f.url().includes('youtube'));
+    if (!fr) throw new Error('لم يُحمَّل إطار YouTube');
+
+    // فيديو محذوف أو ممنوع التضمين يعرض لوحة خطأ بدل أن يشتغل
+    const err = await fr.evaluate(() => {
+      const e = document.querySelector('.ytp-error, .ytp-error-content-wrap-reason');
+      return e ? (e.textContent || '').trim().slice(0, 90) : null;
+    }).catch(() => null);
+    if (err) throw new Error('لوحة خطأ داخل المشغّل: ' + err);
+
+    // التشغيل الفعلي: زمن الفيديو يتقدّم
+    const read = () => fr.evaluate(() => {
+      const v = document.querySelector('video');
+      return v ? v.currentTime : -1;
+    }).catch(() => -1);
+    const t1 = await read();
+    await p.waitForTimeout(3500);
+    const t2 = await read();
+    if (!(t2 > 0 && t2 > t1)) throw new Error(`الفيديو لا يتقدّم (${t1} → ${t2})`);
   });
-  await t('زر المشاهدة على YouTube موجود', async () => {
+  await t('رابط المشاهدة يطابق البثّ المضمَّن', async () => {
+    const embed = await p.getAttribute('iframe[src*="youtube-nocookie.com/embed"]', 'src');
+    const embedId = (embed.match(/embed\/([A-Za-z0-9_-]{11})/) || [])[1];
     const href = await p.getAttribute('a[href*="youtube.com/watch"]', 'href');
-    if (!href.includes('eN20gbQA6wY')) throw new Error('رابط خاطئ');
+    if (!embedId || !href.includes(embedId)) throw new Error(`تضمين ${embedId} ≠ رابط ${href}`);
   });
 
   const m = await (await b.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true })).newPage();

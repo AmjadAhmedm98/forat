@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { LogoMark } from "@/components/brand/Logo";
 import { onAir, KIND_LABEL, type OnAir } from "@/lib/onair";
 import { fmtSlot } from "@/data/schedule";
-import { YT_LIVE_ID, YT_LIVE_URL, YT_LIVE_EMBED, ytImage } from "@/data/media";
+import { YT_LIVE_ID, YT_LIVE_URL, YT_LIVE_EMBED, YT_LIVE_FALLBACK, ytImage } from "@/data/media";
 import { clock, minutesLabel, cx } from "@/lib/format";
 
 /**
@@ -120,7 +120,7 @@ export function Player({
                 قد يكون البثّ قد انتهى أو أن التضمين غير متاح حالياً.
               </p>
               <a
-                href={YT_LIVE_URL}
+                href={YT_LIVE_FALLBACK}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="focusable mt-5 inline-flex items-center gap-2 rounded-full bg-onair px-5 py-2.5 text-[12.5px] font-extrabold text-white transition hover:brightness-110"

@@ -1,4 +1,4 @@
-import { BROADCAST, liveWatchUrl, liveEmbedUrl } from "@/config/broadcast.config";
+import { BROADCAST, liveWatchUrl, liveEmbedUrl, liveFallbackUrl } from "@/config/broadcast.config";
 
 /**
  * سجل الوسائط الحقيقية — مصدران رسميان فقط:
@@ -18,6 +18,8 @@ export const YT_CHANNEL = BROADCAST.channelUrl;
 export const YT_LIVE_ID = BROADCAST.liveVideoId;
 export const YT_LIVE_URL = liveWatchUrl();
 export const YT_LIVE_EMBED = liveEmbedUrl();
+/** رابط البثّ الدائم للقناة — يُستخدم حين يتعذّر التشغيل داخل الصفحة */
+export const YT_LIVE_FALLBACK = liveFallbackUrl();
 
 export const NEWS_SITE = "https://alforatnews.iq";
 
