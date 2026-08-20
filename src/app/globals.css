@@ -1,26 +1,302 @@
 @import "tailwindcss";
 
+/* ══════════════════════════════════════════════════════════════
+   منصة الفرات الإعلامية الرقمية — نظام التصميم
+   لوحة الهوية مستخرجة من الـ Key Art الرسمي لقناة الفرات الفضائية.
+
+   الصفحة تعمل بنطاقين:
+   • zone-dark  → غرفة البثّ: الهيدر، العاجل، البثّ المباشر، Shorts، الراديو، الفوتر
+   • zone-light → المساحة التحريرية: الأخبار، الأقسام، التقارير، البرامج، الجدول
+   ══════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* أرضيات كحلية */
+  --color-midnight: #02072a;
+  --color-midnight-2: #040d3a;
+  --color-navy: #061452;
+  --color-navy-2: #0a1c6b;
+  --color-deep-blue: #0b2a8f;
+
+  /* الأزرق البثّي */
+  --color-broadcast: #0a54d8;
+  --color-broadcast-lo: #0741a8;
+  --color-cyan: #00d7ff;
+  --color-cyan-dim: #4fe4ff;
+
+  /* ثانوي محدود */
+  --color-violet: #783cff;
+  --color-fuchsia: #b62ddb;
+
+  /* معادن ونصوص */
+  --color-silver: #e5e3dc;
+  --color-champagne: #c9bfa3;
+  --color-soft: #f5f7fc;
+  --color-gold: #f5c518;
+  --color-onair: #ff2d46;
+
+  /* المساحة التحريرية الفاتحة */
+  --color-paper: #f4f7fc;
+  --color-paper-2: #e9eff9;
+  --color-ink: #08123f;
+  --color-ink-2: #33427c;
+  --color-ink-3: #6d7aa6;
+
+  --font-sans: var(--font-ar), "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-mono-num), ui-monospace, monospace;
+  --ease-broadcast: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --shell: 1440px;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─────────── الرموز الدلالية لكل نطاق ─────────── */
+
+.zone-light,
+:root {
+  --fg: #08123f;
+  --fg-2: #33427c;
+  --fg-3: #6d7aa6;
+  --surface: #ffffff;
+  --surface-2: #eef3fb;
+  --line: rgba(8, 18, 63, 0.1);
+  --line-2: rgba(8, 18, 63, 0.2);
+  --accent: #0a54d8;
+  --shadow-card: 0 1px 2px rgba(8, 18, 63, 0.05), 0 8px 24px -12px rgba(8, 18, 63, 0.16);
+  --shadow-hover: 0 2px 6px rgba(8, 18, 63, 0.07), 0 18px 44px -16px rgba(10, 84, 216, 0.3);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.zone-dark {
+  --fg: #f5f7fc;
+  --fg-2: #a4b4de;
+  --fg-3: #7286bb;
+  --surface: rgba(10, 28, 107, 0.36);
+  --surface-2: rgba(6, 20, 82, 0.6);
+  --line: rgba(148, 178, 255, 0.16);
+  --line-2: rgba(148, 178, 255, 0.32);
+  --accent: #00d7ff;
+  --shadow-card: 0 10px 40px -20px rgba(0, 0, 0, 0.8);
+  --shadow-hover: 0 0 0 1px rgba(0, 215, 255, 0.22), 0 16px 50px -18px rgba(0, 215, 255, 0.35);
+  color-scheme: dark;
+  color: var(--fg);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.65;
 }
+
+/* ─────────── نطاق البثّ الداكن ─────────── */
+
+/*
+ * قواعد النطاق الداكن داخل @layer base — لأن القواعد خارج الطبقات تتغلّب على
+ * أدوات Tailwind، وكانت `position: relative` تُلغي `sticky` من الهيدر.
+ */
+@layer base {
+  .zone-dark {
+    position: relative;
+    isolation: isolate;
+    background: var(--color-midnight);
+  }
+
+  .zone-dark::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(120% 90% at 50% -20%, rgba(11, 42, 143, 0.6) 0%, transparent 62%),
+      radial-gradient(70% 60% at 88% 6%, rgba(120, 60, 255, 0.16) 0%, transparent 65%),
+      radial-gradient(60% 55% at 6% 20%, rgba(0, 215, 255, 0.13) 0%, transparent 60%),
+      linear-gradient(180deg, #030a30 0%, #02072a 55%, #010518 100%);
+  }
+
+  .zone-dark::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.45;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(148, 178, 255, 0.04) 0px,
+      rgba(148, 178, 255, 0.04) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  }
+}
+
+/* ─────────── أدوات ─────────── */
+
+@utility shell {
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (min-width: 768px) { padding-inline: 2rem; }
+}
+
+/** بطاقة تتكيّف مع النطاق تلقائياً */
+@utility card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-card);
+}
+
+@utility hairline { border: 1px solid var(--line); }
+
+@utility fg { color: var(--fg); }
+@utility fg-2 { color: var(--fg-2); }
+@utility fg-3 { color: var(--fg-3); }
+@utility accent { color: var(--accent); }
+
+@utility glass {
+  background: var(--surface);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid var(--line);
+}
+
+/* أرقام جدولية داخل نص عربي — تبقى ضمن اتجاه RTL */
+@utility num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* سلاسل لاتينية/رقمية خالصة: الساعة، التردد، الأكواد */
+@utility ltr-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+  letter-spacing: -0.01em;
+}
+
+@utility silver-text {
+  background: linear-gradient(160deg, #ffffff 0%, #e5e3dc 30%, #c9bfa3 52%, #ffffff 74%, #b9c6e8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility focusable {
+  outline: none;
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+@utility rail {
+  display: flex;
+  gap: 0.875rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar { display: none; }
+  > * { scroll-snap-align: start; flex: none; }
+}
+
+@utility clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+@utility clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@utility clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+@utility clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+
+/** تدرّج خفيف جداً فوق الصورة — فقط لقراءة النص، لا يخفي الصورة */
+@utility scrim {
+  background: linear-gradient(
+    to top,
+    rgba(3, 8, 32, 0.92) 0%,
+    rgba(3, 8, 32, 0.62) 26%,
+    rgba(3, 8, 32, 0.16) 55%,
+    rgba(3, 8, 32, 0) 78%
+  );
+}
+
+@utility scrim-soft {
+  background: linear-gradient(
+    to top,
+    rgba(3, 8, 32, 0.78) 0%,
+    rgba(3, 8, 32, 0.28) 42%,
+    rgba(3, 8, 32, 0) 72%
+  );
+}
+
+/* ─────────── حركات ─────────── */
+
+@keyframes ticker-rtl { from { transform: translateX(-7%); } to { transform: translateX(43%); } }
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255, 45, 70, 0.55); }
+  70% { opacity: 0.85; box-shadow: 0 0 0 7px rgba(255, 45, 70, 0); }
+}
+@keyframes ring-out {
+  0% { transform: scale(0.55); opacity: 0.5; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+@keyframes sweep { 0% { transform: translateX(-120%); } 100% { transform: translateX(320%); } }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes bars { 0%, 100% { transform: scaleY(0.28); } 50% { transform: scaleY(1); } }
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+.anim-rise { animation: rise 0.55s var(--ease-broadcast) both; }
+
+@utility skeleton {
+  background: linear-gradient(100deg, var(--surface-2) 40%, var(--line) 50%, var(--surface-2) 60%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+::selection { background: rgba(10, 84, 216, 0.22); }
+.zone-dark ::selection { background: rgba(0, 215, 255, 0.3); color: #fff; }
+
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: var(--color-paper-2); }
+::-webkit-scrollbar-thumb { background: #b9c6e2; border-radius: 99px; border: 3px solid var(--color-paper-2); }
+::-webkit-scrollbar-thumb:hover { background: #94a6cf; }
+
+/* مؤشّرات مشغّل الإذاعة — شريط التقدّم ومستوى الصوت */
+.radio-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 99px;
+  background: #fff;
+  border: 2px solid var(--color-cyan);
+  box-shadow: 0 0 12px -2px var(--color-cyan);
+  cursor: pointer;
+}
+.radio-range::-moz-range-thumb {
+  width: 11px;
+  height: 11px;
+  border-radius: 99px;
+  background: #fff;
+  border: 2px solid var(--color-cyan);
+  cursor: pointer;
+}
+.radio-range:disabled::-webkit-slider-thumb { opacity: .35; box-shadow: none; }
+.radio-range:disabled::-moz-range-thumb { opacity: .35; }

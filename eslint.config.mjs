@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // أدوات فحص تعمل على Node مباشرة (CommonJS) خارج حزمة التطبيق
+    "tools/**",
+    "qa-screens/**",
   ]),
 ]);
 
